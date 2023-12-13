@@ -2,11 +2,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=, initial-scale=1.0">
-    <title>Task-app-filter</title>
-    <link rel="stylesheet" href="./Task-app-filter.css">
+    <title>Task-app-with-filter</title>
+    <link rel="stylesheet" href="./styles/Task-app-filter.css">
+    <link rel="stylesheet" href="./styles/modal.css">
 </head>
 <body>
     <div class="main">
+        <!-- <div>
+            <h1>Hello, Irene</h1>
+            <p>Here is a list of your task today</p>
+        </div> -->
         <div class="head-section">
             <section class="search-wrapper">
                 <img src="./icons/search-icon.svg" alt="search-icon" class="searchIcon">
@@ -14,38 +19,52 @@
                 <img src="./icons/close-icon.svg" alt="close-icon" class="closeIcon">
             </section>
           <div>
-            <button class="addBtn">+ Add Task</button>
+            <button class="addBtn" id="openAddTaskModal">+ Add Task</button>
           </div>  
+        </div>
+          
+        <div><h4 class="filter-status-title">Filter by Status</h4></div>
+        <section class="status-button-wrapper">
+            
+            <div id="statusButtons">
+                <button class="btnStatus">All</button>
+                <button class="btnStatus">Done</button>
+                <button class=" btnStatus">In Progress</button>
+                <button class=" btnStatus">Todo</button>
+            </div>
+            
+            <div class="icon-img">
+                <img  src="./icons/filter.svg" alt="filter-icon"> 
+
+            </div>
+
+        </section>
+        <div>
+            <p id="selectedItems" class="selected-items">Selected Items: 0</p>
         </div>
        
 
-        <table class="tableOfTasks">
+        <table class="tableOfTasks" id="table-of-tasks">
             <thead class="table-head">
-               
-                    <th>S/N</th>
-                    <th>Description</th>  
-                    <th>Status</th>  
-                    <th>Date</th> 
-                    <th>Priority</th> 
-                    <th></th>  
+               <tr>
+                <th><input type="checkbox"></th>
+                <th>S/N</th>
+                <th>Description</th>  
+                <th>Status</th>  
+                <th>Date</th> 
+                <th>Priority</th> 
+                <th>Action</th>
+
+               </tr>  
                
             </thead>
 
-            <tbody  id="tableBody " >
+            <tbody  id="tableBody" >
                 <!--it will be dynamically added  -->
             </tbody>
 
         </table>
-
-        <div class="pagination">
-            <p>
-                Displaying 1-3 of <span>3</span>
-            </p>
-            <button>Previous </button> <b>1</b>
-            <button>Next </button>
-        </div>
-
-        <div class="emptyState">
+        <div class="emptyState" id="empty-state">
             <div>
                 <img src="./icons/search-icon.svg" alt="" class="emptySearchIcon">
 
@@ -58,10 +77,99 @@
                      Check the spelling or try a new search
                  </p>
                </div>
+
+        <section class="pagination">
+            <p>
+                <span >Displaying</span>
+                <b><span id="currentPage">1</span>-<span id="total-page"></span></b>
+                <span id="total-no-items">Of 50</span>
+            </p>
+
+           <div>
+            <button id="prevBtn">Previous </button>
+
+            <select name="" class="selectPage" id="selectPageDropdown"></select>
+            
+            <button id="nextBtn">Next </button>
+
+           </div>
+        </section>
+
+
+         <!-- The modal -->
+<div id="addTaskModal" class="modalOverlay">
+ <!-- The modal Content -->
+    <div class="modal-content">
+
+      <!--  Add Task Form -->
+      <form action="" id="addTaskForm" class="add-task-form">
+        <div class="modal-header">
+            <h4>Add Task</h4>
+            <button class="close-button" id="closeButton">&times;</button>
         </div>
+        <div class="modal-input">
+       <div>
+        <label for="taskStatus"> Select Status</label>
+        <div>
+            <button type="button" id="taskStatus" class="task-status" data-status="Todo">Todo</button> 
+            <button type="button" id="taskStatus" class="task-status">In Progress</button> 
+            <button type="button" id="taskStatus" class="task-status">Done</button>  
+            <button type="button" id="taskStatus" class="task-status">On Hold</button>   
+           </div>
+           <p id="statusError" class="error-message"></p>
+
+       </div>
+        
+        <div>
+            <label for="taskDate"> Select Date</label>
+            <div>
+                <input type="date" id="taskDate" class="task-date" required>
+
+            </div>
+            <p id="dateError" class="error-message"></p>
+
+        </div>
+       <div>
+        
+        <label for="taskPriority"> Select Priority</label>
+        <div >
+            <button type="button" id="taskPriority" class="task-priority" data-priority="High" >High</button> 
+            <button type="button" id="taskPriority" class="task-priority">Low</button> 
+            <button type="button" id="taskPriority" class="task-priority">Medium</button> 
+              
+        </div>
+        <p id="priorityError" class="error-message"></p>
+
+       </div>
+       <div>
+        <label for="taskDescription">Describe your task</label>
+       <div>
+        <textarea 
+        id="taskDescription" 
+        rows="5" 
+        cols="30"
+        
+        required>
+         </textarea>
+       </div>
+       <p id="descriptionError" class="error-message"></p>
+
+       </div>
+       <div>
+        <button type="button" id="addTaskBtn">Add Task</button>
+
+       </div>
+    </div>
+      </form>
+    </div>
+  </div>
+  
+</div>
     
     
-   <script src="./Task-app-filter.js"></script>
-   <script src="./data.js"></script>
+   <script type="module" src="./js/Task-app-filter.js" ></script>
+   <script src="./js/helpers.js"></script>
+   <script  src="./js/modal.js"></script>
+   <!-- <script type="module" src="./data.js"></script> -->
 </body>
 </html>
