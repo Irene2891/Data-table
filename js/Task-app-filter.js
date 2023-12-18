@@ -1,5 +1,5 @@
-import {data} from "./data.js"
-
+import {data} from "./data.js";
+import { formatDate } from "./helpers.js";
 
 //Variables
 const searchInput = document.querySelector('.searchInput');
@@ -45,6 +45,7 @@ function filterData() {
   generateTable(filteredData);
 }
 
+// Function to get the selected status filter
 function getStatusFilter() {
   const selectedStatusButton = document.querySelector('.btnStatus.active');
 
@@ -52,14 +53,16 @@ function getStatusFilter() {
     return selectedStatusButton.textContent.toLowerCase();
   }
 
-  return 'all';
+  return;
 }
 
+// Add input event listener for general filtering
 searchInput.addEventListener('input', () => {
   closeIcon.style.display = searchInput.value.trim() ? 'block' : 'none';
   filterData();
 });
 
+// Add click event listeners to each status button
 statusButtons.forEach(button => {
   button.addEventListener('click', () => {
     statusButtons.forEach(btn => btn.classList.remove('active'));
@@ -77,15 +80,15 @@ statusButtons.forEach(button => {
   tableBody.innerHTML='';
 
   data.forEach((task, index)=>{
-    const row = document.createElement('tr')
-    row.className= 'description'
+    const row = document.createElement('tr');
+    // row.className= 'description'
     row.innerHTML = `
                <td><input type="checkbox" class="taskCheckox" 
                data-index="${index}"/> </td> 
                 <td>${index + 1}</td>
                 <td class='describe'>${task.description}</td>
-                <td><button class="statusBtn ${task.status.toLowerCase()}">${task.status}</button></td>
-                <td>${task.date}</td>
+                <td><button class="statusBtn ${task.status.toLowerCase().replace(/\s/g, "")}">${task.status}</button></td>
+                <td>${formatDate(task.date)}</td>
                 <td><button class="statusBtn ${task.priority.toLowerCase()}">${task.priority}</button></td>
                 <td><span class="ellipsis">&#8942;</span></td>
             `;
@@ -119,6 +122,7 @@ function displayTasks() {
   updateSelectPageDropdown();
 }
 
+ // Function to update select dropdown for page selection
  function updateSelectPageDropdown() {
   const selectDropdown = document.getElementById('selectPageDropdown');
   selectDropdown.innerHTML = '';
@@ -134,6 +138,7 @@ function displayTasks() {
 }
 
 
+// Event listener for next button
 document.getElementById('nextBtn').addEventListener('click', () => {
   if (currentPage < calculateTotalPages()) {
     currentPage++;
@@ -157,34 +162,27 @@ displayTasks();
 
 
 
-
- // // checkbox functionality
-
-// let numberOfSelectedItems= 0;
-
-// tableBody.addEventListener('change', (e) =>{
-
-//   if (e.target.type === 'checkbox' && e.target.classList.contains('taskCheckbox')){
-//     const checkedCheckboxes= document.querySelectorAll('.taskCheckbox:checked');
-//     numberOfSelectedItems=checkedCheckboxes.length;
-    
-//     // const isChecked=e.target.checked;
-//     // // const index= e.target.dataset.index;
   
-//     // if(isChecked){
-//     //   numberOfSelectedItems++;
-    
-//     // } else{
-//     //   numberOfSelectedItems--;
-//     // }
-  
-//     updateSelectedItems();
-//   }
-// });
-
-// function updateSelectedItems(){
-//   const selectedItems=document.getElementById('selectedItems');
-//   selectedItems.textContent = `Selected items: $numberOfSelectedItems}`;
-// }
+ // Elements for sorting
+ const ascendingArrow = document.querySelector('[data-ascendingArrow]');
+ const descendingArrow = document.querySelector('[data-descendingArrow]');
  
+ 
+ // Event listener for ascending order
+   ascendingArrow.addEventListener('click', () => {
+    descendingArrow.style.color='';
+    ascendingArrow.style.color=descendingArrow.style.color==='red' ? '' : 'red';
+    let sortedDate= taskData.taskList.sort((a,b)=>b.date -a.date)
+      generateTable(sortedDate);
+ });
+ 
+ // Event listener for descending order
+ descendingArrow.addEventListener('click', () => {
+  ascendingArrow.style.color='';
+  descendingArrow.style.color=descendingArrow.style.color==='red' ? '' : 'red';
+  let descendingSortedDate= taskData.taskList.sort((a,b)=>a.date -b.date)
+    generateTable(descendingSortedDate);
 
+ });
+ 
+ 

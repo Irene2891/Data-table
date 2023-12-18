@@ -1,136 +1,165 @@
+import { data } from "./data.js";
+  //   document.addEventListener('DOMContentLoaded', () => {
+  //   const userName = "Irene Ezechi";
+  //   document.body.insertAdjacentHTML('afterbegin', `<p>Welcome, <b>${userName}</b>.</p>
+  //   <p>Here is your task for the day.</p>`);
+  // });
 
-    document.addEventListener('DOMContentLoaded', () => {
-    const userName = "Irene Ezechi";
-    document.body.insertAdjacentHTML('afterbegin', `<p>Welcome, <b>${userName}</b>.</p>
-    <p>Here is your task for the day.</p>`);
-  });
- 
+  const taskData={
+    taskList:data,
+  };
 
-    document.getElementById('openAddTaskModal').addEventListener('click', () => {
-    document.getElementById('addTaskModal').style.display = 'block';
+ const addTaskModal=document.getElementById('addTaskModal');
+ const openAddTaskModal =document.getElementById('openAddTaskModal');
+ const taskDate= document.getElementById('taskDate');
+ const closeButton=document.getElementById('closeButton');
+ const addTaskBtn=document.getElementById('addTaskBtn')
+ const taskStatus=document.querySelectorAll('.task-status');
+ const statusOfTask=document.getElementById('taskStatus');
+  const taskPriority=document.querySelectorAll('.task-priority');
+  const taskPriorities=document.getElementById('taskPriority')
+  const descriptionError= document.getElementById('descriptionError');
+  const statusError=document.getElementById('statusError');
+  const dateError=document.getElementById('dateError');
+ const priorityError= document.getElementById('priorityError');
+ const textarea = document.querySelector("[data-textarea]");
+ const time = document.querySelector("[data-date]")
+ const openFilterModal =document.getElementById('openFilterModal');
+ const filterModal=document.getElementById('filterModal');
+
+ const newTask ={
+  id: Math.random(),
+  description: "",
+  status: "",
+  date:"",
+  priority:""
+};
+
+const validateForm =() =>{
+  if (!newTask.description) {
+   descriptionError.innerText = 'Please Describe your task.';
     
-    document.getElementById('taskDate').valueAsDate = new Date();
+  }else{
+    descriptionError.innerText ='';
+  }
+
+  if (!newTask.status) {
+   statusError.innerText = 'Please select a status.';
+    
+  }else{
+    statusError.innerText ='';
+  }
+
+  if (!newTask.date) {
+    dateError.innerText = 'Please select a date.';
+    
+  }else{
+    dateError.innerText ='';
+  }
+
+  if (!newTask.priority) {
+    priorityError.textContent = 'Please select a priority.';
+    
+  }else{
+    priorityError.innerText ='';
+  }
+}
+
+    openAddTaskModal.addEventListener('click', () => {
+    addTaskModal.style.display = 'block';
+   taskDate.valueAsDate = new Date();
   });
 
+
+  openFilterModal.addEventListener('click', () => {
+    filterModal.style.display = 'block';
+  });
   //  closing the modal both within and outside
-        document.getElementById('closeButton').addEventListener('click', () => {
-          closeAddTaskModal()
-      });
-      document.getElementById('addTaskModal').addEventListener('click', (e) => {
-    if(e.target=== document.getElementById('addTaskModal')){
+    closeButton.addEventListener('click', () => {
+      closeAddTaskModal()
+  });
+  
+     addTaskModal.addEventListener('click', (e) => {
+    if(e.target=== addTaskModal){
       closeAddTaskModal();
     }
-      });
+  });
 
       
-    document.getElementById('addTaskBtn').addEventListener('click', () =>{
+   addTaskBtn.addEventListener('click', (e) =>{
+    e.preventDefault()
 
-    validateForm();
-      });
+    validateForm()
 
-  document.querySelectorAll('.task-status').forEach((statusButton) => {
-  statusButton.addEventListener('click', () => {
-                  console.log('status button:', statusButton.dataset.status);
+    // taskData.taskList.push(newTask);
 
-    document.querySelectorAll('.task-status').forEach(button => button.classList.remove('selected'));
+    // generateTable(taskData.taskList);
+
+    // closeAddTaskModal();
+  
     
-    statusButton.classList.add('selected');
+ })
 
-    document.getElementById('taskStatus').value = statusButton.dataset.status;
-  });
-});
 
-document.querySelectorAll('.task-priority').forEach((priorityButton) => {
-  priorityButton.addEventListener('click', () => {
-              console.log('status button:', priorityButton.dataset.priority);
-
-    document.querySelectorAll('.task-priority').forEach(button => button.classList.remove('selected'));
+ taskStatus.forEach((statusButton) => {
+  statusButton.addEventListener('click', (e) => {
+    e.preventDefault()
+    taskStatus.forEach((button) => {button.classList.remove('selected')});
     
-    priorityButton.classList.add('selected');
+    e.target.classList.add('selected');
 
-    document.getElementById('taskPriority').value = priorityButton.dataset.priority;
-  });
+    statusOfTask.value = statusButton.dataset.status;
+  })
 });
 
 
+taskPriority.forEach((priorityButton) => {
+  priorityButton.addEventListener('click', (e) => {
+    e.preventDefault()
+   taskPriority.forEach((button) => {button.classList.remove('selected')});
+    
+   e.target.classList.add('selected');
+   taskPriorities.value = priorityButton.dataset.priority;
+  })
+});
+
+textarea.addEventListener('input', (e) => {
+  newTask.description = e.target.value;
+});
+
+time.addEventListener('input', (e) => {
+  let timeStamp = new Date(e.target.value).getTime();
+
+  let date = new Date();
+  let dateInput = `${date.getDate()}th ${new Date(timeStamp).toLocaleDateString(
+    "en-GB",
+    {
+      month: "short",
+    }
+  )}, ${date.getFullYear()}`;
+  newTask.date = dateInput;
+});
+
+
+
+   
 
 
 
 
+  
 
 
-
-      document.querySelectorAll('task-status').forEach((statusButton)=>{
-        statusButton.addEventListener('click', () =>{
-          console.log('status button:', statusButton.dataset.status);
-          document.getElementById('taskStatus').value=statusButton.dataset.status;
-        });
-      });
-
-      document.querySelectorAll('task-priority').forEach((priorityButton)=>{
-        priorityButton.addEventListener('click', () =>{
-          console.log('status button:', priorityButton.dataset.status);
-          document.getElementById('task-priority').value=priorityButton.dataset.priority;
-        });
-      });
-
-
-  function addTask(description, status, date, priority){
-    const newTask ={
-      id: Math.random(),
-      description: description,
-      status: status,
-      date:date,
-      priority:priority,
-    };
-
-    taskData.taskList.push(newTask);
-
-    generateTable(taskData.taskList);
-
-    closeAddTaskModal();
-  }
-
-function validateForm() {
-  const description = document.getElementById('taskDescription').value;
-  const status = document.getElementById('taskStatus').value;
-  const date = document.getElementById('taskDate').value;
-  const priority = document.getElementById('taskPriority').value;
-
-  document.getElementById('descriptionError').textContent = '';
-  document.getElementById('statusError').textContent = '';
-  document.getElementById('dateError').textContent = '';
-  document.getElementById('priorityError').textContent = '';
-
-  if (!description) {
-    document.getElementById('descriptionError').textContent = 'Please enter a description.';
-    return;
-  }
-
-  if (!status) {
-    document.getElementById('statusError').textContent = 'Please select a status.';
-    return;
-  }
-
-  if (!date) {
-    document.getElementById('dateError').textContent = 'Please select a date.';
-    return;
-  }
-
-  if (!priority) {
-    document.getElementById('priorityError').textContent = 'Please select a priority.';
-    return;
-  }
-
-  addTask(description, status, date, priority);
-
+  
 closeAddTaskModal();
-}
+
 
 
 
   function closeAddTaskModal(){
-    document.getElementById('addTaskModal').style.display = 'none';
+    addTaskModal.style.display = 'none';
 
   }
   
+
+ 
